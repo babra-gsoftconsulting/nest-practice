@@ -3,7 +3,10 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Res,
 } from '@nestjs/common';
@@ -16,7 +19,16 @@ export class CatsController {
   constructor(private readonly catService: CatsService) {}
   @Get()
   findAll(): string {
-    return this.catService.findAll();
+    try {
+      return this.catService.findAll();
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.FORBIDDEN,
+        error: 'This is a custom message',
+      }, HttpStatus.FORBIDDEN, {
+        cause: error
+      });
+    }
   }
   @Post()
   @HttpCode(200)
@@ -25,8 +37,8 @@ export class CatsController {
   }
 
   @Get(':id')
-  findOne(@Param() params: any): string {
-    return this.catService.findOne(params);
+  findOne(@Param('id', ParseIntPipe) id:number){
+    return this.catService.findOne(id);
   }
 
   @Post('body')

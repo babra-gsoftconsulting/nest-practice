@@ -9,8 +9,8 @@ export class CatsService {
     return 'This action adds a new cat by service';
   }
   findOne(params: any): string {
-    console.log(params.id);
-    return `This action returns a #${params.id} cat`;
+    console.log(params);
+    return `This action returns a #${params} cat`;
   }
   insertCatsData(body: any) {
     return `cats created with name: ${body.name}, price: ${body.age} and breed:${body.breed}`;
